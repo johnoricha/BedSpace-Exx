@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "346536924836",
+    "firebase_url": "https://bed-space-ex.firebaseio.com",
+    "project_id": "bed-space-ex",
+    "storage_bucket": "bed-space-ex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346536924836:android:e6b5df89e6b341bd45f831",
+        "android_client_info": {
+          "package_name": "com.example.bedspaceex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346536924836-qr2bi7dd55clkhcr1c2q5553pdc8lotd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoLAMvIn9bEZKatRNd7EAR5xKzqEYTKAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346536924836-qr2bi7dd55clkhcr1c2q5553pdc8lotd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
