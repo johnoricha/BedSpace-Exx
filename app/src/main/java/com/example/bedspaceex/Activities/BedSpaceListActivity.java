@@ -84,35 +84,6 @@ public class BedSpaceListActivity extends AppCompatActivity {
         rvBedSpaceList.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvBedSpaceList.setLayoutManager(layoutManager);
-        // list creation
-        // BedSpaceList = new ArrayList<>();
-        /*
-        adding items to the list
-        BedSpaceList.add(
-                new BedSpace(
-                        1,
-                        "A16",
-                        15000,
-                        "John Oricha",
-                        "08165215761",
-                        "Zik",
-                        "A"));
-        BedSpaceList.add(
-                new BedSpace(2,
-                        "B2",
-                        30000,
-                        "Felix Samuel",
-                        "07087506133",
-                        "Mellanby",
-                        "A"));
-        BedSpaceList.add(
-                new BedSpace(3,
-                        "D12",
-                        20000,
-                        "Promise Dennis",
-                        "08101128804",
-                        "Sultan Bello",
-                        "A"));*/
     }
 
 
@@ -150,7 +121,7 @@ public class BedSpaceListActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                            // ...
+                            // ..
             }
         };
     }
