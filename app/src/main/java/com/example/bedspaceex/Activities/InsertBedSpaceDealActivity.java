@@ -23,16 +23,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class InsertBedSpaceDealActivity extends AppCompatActivity {
-
+    private static final String TAG = "InsertBedSpaceDealActiv";
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
 
-    EditText editTextOwnerName;
-    EditText editTextRoomNo;
-    Spinner spinnerHalls;
-    Button btnUploadOffer;
-    EditText editTextPhoneNo;
-    EditText editTextPrice;
+    EditText mEditTextOwnerName;
+    EditText mEditTextRoomNo;
+    Spinner mSpinnerHalls;
+    Button mBtnUploadOffer;
+    EditText mEditTextPhoneNo;
+    EditText mEditTextPrice;
+    public static String OWNER_NAME;
+    public String mOwnerName;
+    private String mRoomNumber;
+    private String mHall;
+    private String mPrice;
+    private String mPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +47,12 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        editTextOwnerName = (EditText) findViewById(R.id.editText_Owner_Name);
-        editTextRoomNo = (EditText) findViewById(R.id.editText_RoomNo);
-        spinnerHalls = (Spinner) findViewById(R.id.spinner_Hall);
-        btnUploadOffer = (Button) findViewById(R.id.btn_Upload_Offer);
-        editTextPhoneNo = (EditText) findViewById(R.id.editText_phone_number);
-        editTextPrice = (EditText) findViewById(R.id.editText_price);
+        mEditTextOwnerName = (EditText) findViewById(R.id.editText_owner_name);
+        mEditTextRoomNo = (EditText) findViewById(R.id.editText_roomNo);
+        mSpinnerHalls = (Spinner) findViewById(R.id.spinner_hall);
+        mBtnUploadOffer = (Button) findViewById(R.id.btn_upload_offer);
+        mEditTextPhoneNo = (EditText) findViewById(R.id.editText_phone_number);
+        mEditTextPrice = (EditText) findViewById(R.id.editText_price);
 
         Intent intent = getIntent();
         BedSpaces bedSpaces = (BedSpaces) intent.getSerializableExtra("bedspaceToEdit");
@@ -55,13 +61,13 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
             //do nothing
         }
         else {
-            editTextOwnerName.setText(bedSpaces.getOwnerName());
-            editTextRoomNo.setText(bedSpaces.getRoomNumber());
-            editTextPrice.setText(bedSpaces.getPrice());
-            editTextPhoneNo.setText(bedSpaces.getPhoneNumber());
+            mEditTextOwnerName.setText(bedSpaces.getOwnerName());
+            mEditTextRoomNo.setText(bedSpaces.getRoomNumber());
+            mEditTextPrice.setText(bedSpaces.getPrice());
+            mEditTextPhoneNo.setText(bedSpaces.getPhoneNumber());
             //spinnerHalls.setSelection(Integer.parseInt(String.valueOf(bedSpaces.getHall())));
             Toast.makeText(this, "make sure the right hall is selected before saving", Toast.LENGTH_LONG).show();
-            btnUploadOffer.setEnabled(false);
+            mBtnUploadOffer.setEnabled(false);
         }
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -76,16 +82,16 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         // ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, hallsList);
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerHalls.setAdapter(spinnerAdapter);
+        mSpinnerHalls.setAdapter(spinnerAdapter);
 
-        btnUploadOffer.setOnClickListener(new View.OnClickListener() {
+        mBtnUploadOffer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!isEmpty(editTextOwnerName.getText().toString()) && !isEmpty(editTextPhoneNo.getText().toString())
-                && !isEmpty(editTextPrice.getText().toString()) && !isEmpty(editTextRoomNo.getText().toString())) {
+                if(!isEmpty(mEditTextOwnerName.getText().toString()) && !isEmpty(mEditTextPhoneNo.getText().toString())
+                && !isEmpty(mEditTextPrice.getText().toString()) && !isEmpty(mEditTextRoomNo.getText().toString())) {
                     saveToDatabase();
-                    Log.d("tag","deal saved");
+                    Log.d(TAG,"deal saved");
                     Toast.makeText(InsertBedSpaceDealActivity.this, "Offer uploaded", Toast.LENGTH_LONG).show();
                     clean();
                     backToList();
@@ -96,23 +102,29 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         });
     }
     private void clean() {
-        editTextOwnerName.setText("");
-        editTextPhoneNo.setText("");
-        editTextPrice.setText("");
-        editTextRoomNo.setText("");
-        editTextOwnerName.requestFocus();
+        mEditTextOwnerName.setText("");
+        mEditTextPhoneNo.setText("");
+        mEditTextPrice.setText("");
+        mEditTextRoomNo.setText("");
+        mEditTextOwnerName.requestFocus();
 
     }
 
     private void saveToDatabase() {
 
-        String ownerName = editTextOwnerName.getText().toString();
-        String roomNumber = editTextRoomNo.getText().toString();
-        String hall = spinnerHalls.getSelectedItem().toString();
-        String price = editTextPrice.getText().toString();
-        String phoneNumber = editTextPhoneNo.getText().toString();
-        BedSpaces bedSpaces = new BedSpaces(ownerName, roomNumber, hall, phoneNumber, price);
-        mDatabaseReference.push().setValue(bedSpaces);
+        mOwnerName = mEditTextOwnerName.getText().toString();
+        mRoomNumber = mEditTextRoomNo.getText().toString();
+        mHall = mSpinnerHalls.getSelectedItem().toString();
+        mPrice = mEditTextPrice.getText().toString();
+        mPhoneNumber = mEditTextPhoneNo.getText().toString();
+
+        OWNER_NAME = mOwnerName;
+
+        BedSpaces bedSpaces = new BedSpaces(mOwnerName, mRoomNumber, mHall, mPhoneNumber, mPrice);
+        if (bedSpaces.getId() == null) {
+            mDatabaseReference.push().setValue(bedSpaces);
+        }
+        else updateOffer();
 
     }
 
@@ -138,8 +150,8 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case(R.id.menu_item_save):
-                if(!isEmpty(editTextOwnerName.getText().toString()) && !isEmpty(editTextPhoneNo.getText().toString())
-                        && !isEmpty(editTextPrice.getText().toString()) && !isEmpty(editTextRoomNo.getText().toString())) {
+                if(!isEmpty(mEditTextOwnerName.getText().toString()) && !isEmpty(mEditTextPhoneNo.getText().toString())
+                        && !isEmpty(mEditTextPrice.getText().toString()) && !isEmpty(mEditTextRoomNo.getText().toString())) {
                 updateOffer();
                 Toast.makeText(this, "Offer updated", Toast.LENGTH_LONG).show();
                 backToList();}
@@ -163,11 +175,11 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     private void updateOffer() {
         Intent intent = getIntent();
         BedSpaces bedSpaces = (BedSpaces) intent.getSerializableExtra("bedspaceToEdit");
-        bedSpaces.setOwnerName(editTextOwnerName.getText().toString());
-        bedSpaces.setRoomNumber(editTextRoomNo.getText().toString());
-        bedSpaces.setPhoneNumber(editTextPhoneNo.getText().toString());
-        bedSpaces.setPrice(editTextPrice.getText().toString());
-        bedSpaces.setHall(spinnerHalls.getSelectedItem().toString());
+        bedSpaces.setOwnerName(mEditTextOwnerName.getText().toString());
+        bedSpaces.setRoomNumber(mEditTextRoomNo.getText().toString());
+        bedSpaces.setPhoneNumber(mEditTextPhoneNo.getText().toString());
+        bedSpaces.setPrice(mEditTextPrice.getText().toString());
+        bedSpaces.setHall(mSpinnerHalls.getSelectedItem().toString());
         mDatabaseReference.child(bedSpaces.getId()).setValue(bedSpaces);
 
     }

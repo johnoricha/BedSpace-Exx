@@ -7,7 +7,7 @@
     tools:context=".Activities.InsertBedSpaceDealActivity">
 
     <EditText
-        android:id="@+id/editText_Owner_Name"
+        android:id="@+id/editText_owner_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -22,33 +22,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_RoomNo"
+        android:id="@+id/editText_roomNo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Room Number"
         android:inputType="textCapCharacters"
-        app:layout_constraintEnd_toEndOf="@+id/editText_Owner_Name"
+        app:layout_constraintEnd_toEndOf="@+id/editText_owner_name"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editText_Owner_Name"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Owner_Name" />
+        app:layout_constraintStart_toStartOf="@+id/editText_owner_name"
+        app:layout_constraintTop_toBottomOf="@+id/editText_owner_name" />
 
     <Spinner
-        android:id="@+id/spinner_Hall"
+        android:id="@+id/spinner_hall"
         android:layout_width="0dp"
         android:layout_height="49dp"
         android:layout_marginTop="20dp"
         android:contentDescription="select Hall"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editText_RoomNo"
-        app:layout_constraintStart_toStartOf="@+id/editText_RoomNo"
-        app:layout_constraintTop_toBottomOf="@+id/editText_RoomNo"
+        app:layout_constraintEnd_toEndOf="@+id/editText_roomNo"
+        app:layout_constraintStart_toStartOf="@+id/editText_roomNo"
+        app:layout_constraintTop_toBottomOf="@+id/editText_roomNo"
         app:layout_constraintVertical_bias="0.035" />
 
     <Button
-        android:id="@+id/btn_Upload_Offer"
+        android:id="@+id/btn_upload_offer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="160dp"
@@ -66,10 +66,10 @@
         android:ems="10"
         android:hint="Phone Number "
         android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_Hall"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_hall"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/spinner_Hall"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_Hall" />
+        app:layout_constraintStart_toStartOf="@+id/spinner_hall"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_hall" />
 
     <EditText
         android:id="@+id/editText_price"

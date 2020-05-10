@@ -20,23 +20,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class BedSpaceActivity extends AppCompatActivity {
-    TextView tvHall;
-    TextView tvPrice;
-    TextView tvRoomNo;
-    TextView tvOwnerName;
-    TextView tvPhoneNo;
-    TextView tvBlock;
-    TextView txtHall;
-    TextView txtPrice;
-    TextView txtRoomNo;
-    TextView txtPhone;
-    TextView txtOwnerName;
+    TextView mTextViewHall;
+    TextView mTextViewPrice;
+    TextView mTextViewRoomNo;
+    TextView mTextViewOwnerName;
+    TextView mTextViewPhoneNo;
+   // TextView tvBlock;
+    TextView mTxtHall;
+    TextView mTxtPrice;
+    TextView mTxtRoomNo;
+    TextView mTxtPhone;
+    TextView mTxtOwnerName;
     ImageView imgOwner;
     //private FirebaseDatabase mFirebaseDatabase;
     //private DatabaseReference mDatabaseReference;
     private static final String TAG = "BedSpaceActivity";
 
-    private BedSpaces bedSpaces;
+    private BedSpaces mBedSpaces;
     public Intent mIntent;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
@@ -47,16 +47,16 @@ public class BedSpaceActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvHall = (TextView) findViewById(R.id.tvHall);
-        tvOwnerName = (TextView) findViewById(R.id.tvOwnerName);
-        tvPrice = (TextView) findViewById(R.id.tvPrice);
-        tvRoomNo = (TextView) findViewById(R.id.tvRoomNo);
-        tvPhoneNo = (TextView) findViewById(R.id.tvPhoneNo);
-        txtHall = (TextView) findViewById(R.id.txtHall);
-        txtOwnerName = (TextView) findViewById(R.id.txtOwnerName);
-        txtPhone = (TextView) findViewById(R.id.txtPhoneNo);
-        txtRoomNo = (TextView) findViewById(R.id.txtRoomNo);
-        txtPrice = (TextView) findViewById(R.id.txtPrice);
+        mTextViewHall = (TextView) findViewById(R.id.tvHall);
+        mTextViewOwnerName = (TextView) findViewById(R.id.tvOwnerName);
+        mTextViewPrice = (TextView) findViewById(R.id.tvPrice);
+        mTextViewRoomNo = (TextView) findViewById(R.id.tvRoomNo);
+        mTextViewPhoneNo = (TextView) findViewById(R.id.tvPhoneNo);
+        mTxtHall = (TextView) findViewById(R.id.txtHall);
+        mTxtOwnerName = (TextView) findViewById(R.id.txtOwnerName);
+        mTxtPhone = (TextView) findViewById(R.id.txtPhoneNo);
+        mTxtRoomNo = (TextView) findViewById(R.id.txtRoomNo);
+        mTxtPrice = (TextView) findViewById(R.id.txtPrice);
         imgOwner = (ImageView) findViewById(R.id.imgOwner);
 
         //mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -66,17 +66,17 @@ public class BedSpaceActivity extends AppCompatActivity {
         BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedSpaces");
         if (bedSpaces == null)
             bedSpaces = new BedSpaces();
-        this.bedSpaces = bedSpaces;
-        tvPrice.setText(String.valueOf(bedSpaces.getPrice()));
-        tvOwnerName.setText(bedSpaces.getOwnerName());
-        tvRoomNo.setText(String.valueOf(bedSpaces.getRoomNumber()));
-        tvPhoneNo.setText(bedSpaces.getPhoneNumber());
-        tvHall.setText(bedSpaces.getHall());
+        this.mBedSpaces = bedSpaces;
+        mTextViewPrice.setText(String.valueOf(bedSpaces.getPrice()));
+        mTextViewOwnerName.setText(bedSpaces.getOwnerName());
+        mTextViewRoomNo.setText(String.valueOf(bedSpaces.getRoomNumber()));
+        mTextViewPhoneNo.setText(bedSpaces.getPhoneNumber());
+        mTextViewHall.setText(bedSpaces.getHall());
 
-        tvPhoneNo.setOnClickListener(new View.OnClickListener() {
+        mTextViewPhoneNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sellerPhoneNo = (String) tvPhoneNo.getText();
+                String sellerPhoneNo = (String) mTextViewPhoneNo.getText();
                 Uri sellerPhoneUri = Uri.parse("tel:" + sellerPhoneNo);
                 Intent callSellerIntent = new Intent(Intent.ACTION_DIAL);
                 callSellerIntent.setData(sellerPhoneUri);
@@ -99,7 +99,7 @@ public class BedSpaceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_edit:
                 Intent editActivityIntent = new Intent(this, InsertBedSpaceDealActivity.class);
-                editActivityIntent.putExtra("bedspaceToEdit", bedSpaces);
+                editActivityIntent.putExtra("bedspaceToEdit", mBedSpaces);
                 startActivity(editActivityIntent);
                 return true;
         }

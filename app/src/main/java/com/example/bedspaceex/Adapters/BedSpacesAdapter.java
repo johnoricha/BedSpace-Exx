@@ -28,17 +28,19 @@ import java.util.List;
 
 public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedSpacesViewHolder> implements Filterable {
 
+    private static final String TAG = "BedSpacesAdapter";
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
-    private List<BedSpaces> spaces;
-    private List<BedSpaces> spacesFiltered;
+    private List<BedSpaces> mSpaces;
+    private List<BedSpaces> mSpacesFiltered;
 
 
 
     public BedSpacesAdapter(ArrayList<BedSpaces> spaces){
-        this.spaces = spaces;
-        this.spacesFiltered = spaces;
+        this.mSpaces = spaces;
+        this.mSpacesFiltered = spaces;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("sellers");
 
@@ -47,8 +49,10 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 BedSpaces bedSpaces = dataSnapshot.getValue(BedSpaces.class);
                 bedSpaces.setId(dataSnapshot.getKey());
-                BedSpacesAdapter.this.spaces.add(bedSpaces);
-                notifyItemInserted(BedSpacesAdapter.this.spaces.size()-1);
+                BedSpacesAdapter.this.mSpaces.add(bedSpaces);
+                notifyItemInserted(BedSpacesAdapter.this.mSpaces.size()-1);
+                String bedspaceId = bedSpaces.getId();
+                Log.d(TAG, "onChildAdded: " + bedspaceId);
             }
 
             @Override
@@ -90,7 +94,7 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
     @Override
     public void onBindViewHolder(@NonNull BedSpacesViewHolder holder, int position) {
 
-        BedSpaces bedSpaces = spacesFiltered.get(position);
+        BedSpaces bedSpaces = mSpacesFiltered.get(position);
         holder.tvHall.setText(bedSpaces.getHall());
         holder.tvPrice.setText(bedSpaces.getPrice());
         holder.tvRoomNo.setText(bedSpaces.getRoomNumber());
@@ -99,7 +103,7 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
 
     @Override
     public int getItemCount() {
-        return spacesFiltered.size();
+        return mSpacesFiltered.size();
     }
 
     @Override
@@ -112,28 +116,29 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
         protected FilterResults performFiltering(CharSequence constraint) {
              String searchString  = constraint.toString();
              if(searchString == null || searchString.length() == 0)
-                 spacesFiltered = spaces;
+                 mSpacesFiltered = mSpaces;
              else {
                  String filterPattern = searchString.toLowerCase().trim();
                  List<BedSpaces> filteredList = new ArrayList<>();
 
-                 for (BedSpaces bedSpaces: spaces) {
-                     if (bedSpaces.getRoomNumber().toLowerCase().contains(filterPattern) || bedSpaces.getHall().toLowerCase().contains(filterPattern))
+                 for (BedSpaces bedSpaces: mSpaces) {
+                     if (bedSpaces.getRoomNumber().toLowerCase().contains(filterPattern) ||
+                             bedSpaces.getHall().toLowerCase().contains(filterPattern))
                      {
                          filteredList.add(bedSpaces);
                      }
                  }
-                 spacesFiltered = filteredList;
+                 mSpacesFiltered = filteredList;
              }
                 FilterResults results = new FilterResults();
-                results.values = spacesFiltered;
+                results.values = mSpacesFiltered;
                 Log.d("filter", "filtered list");
                 return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            spacesFiltered = (ArrayList<BedSpaces>)results.values;
+            mSpacesFiltered = (ArrayList<BedSpaces>)results.values;
             notifyDataSetChanged();
         }
 
@@ -156,7 +161,7 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
         public void onClick(View view) {
             int position = getAdapterPosition();
             Log.d("click",String.valueOf(position));
-            BedSpaces selectedBedSpace = spacesFiltered.get(position);
+            BedSpaces selectedBedSpace = mSpacesFiltered.get(position);
             Intent intent = new Intent(view.getContext(), BedSpaceActivity.class);
             intent.putExtra("bedSpaces",selectedBedSpace);
             //intent.putExtra("bedSpace", (Serializable) selectedBedSpace);
