@@ -19,9 +19,7 @@ public class BedSpaces implements Serializable {
 //        this.id = id;
 //    }
 
-
-
-    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price) {
+    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price, String id) {
         this.ownerName = ownerName;
         this.roomNumber = roomNumber;
         this.hall = hall;
@@ -29,6 +27,16 @@ public class BedSpaces implements Serializable {
         this.price = price;
         this.id = id;
     }
+
+
+//    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price) {
+//        this.ownerName = ownerName;
+//        this.roomNumber = roomNumber;
+//        this.hall = hall;
+//        this.phoneNumber = phoneNumber;
+//        this.price = price;
+//        this.id = id;
+//    }
 
     public String getOwnerName() {
         return ownerName;

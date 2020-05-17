@@ -25,8 +25,8 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class UploadYourOfferTest {
     @Rule
-    public  ActivityTestRule<BedSpaceListActivity> mBedSpaceListActivityActivityTestRule =
-            new ActivityTestRule<>(BedSpaceListActivity.class);
+    public  ActivityTestRule<MainActivity> mMainActivityActivityTestRule =
+            new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void saveToDatabase() {
@@ -66,7 +66,7 @@ public class UploadYourOfferTest {
 
 //        pressBack();
         onView(withId(R.id.rvBedSpaceList)).perform(swipeUp());
-        List<BedSpaces> list = mBedSpaceListActivityActivityTestRule.getActivity().spaces;
+        List<BedSpaces> list = mMainActivityActivityTestRule.getActivity().mSpaces;
         int newOfferIndex = list.size()-1;
         String newSeller = list.get(newOfferIndex).getOwnerName();
         String newPrice = list.get(newOfferIndex).getPrice();

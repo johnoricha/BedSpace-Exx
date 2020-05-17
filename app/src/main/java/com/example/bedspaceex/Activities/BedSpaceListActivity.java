@@ -121,7 +121,7 @@ public class BedSpaceListActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                            // ..
+
             }
         };
     }

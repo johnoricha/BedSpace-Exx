@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activities.BedSpaceActivity">
 
+    <include layout="@layout/toolbar"/>
+
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"

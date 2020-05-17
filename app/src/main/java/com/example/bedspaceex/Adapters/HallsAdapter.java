@@ -8,15 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bedspaceex.Activities.BedSpaceActivity;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedSpacesViewHolder> implements Filterable {
+public class HallsAdapter extends RecyclerView.Adapter<HallsAdapter.BedSpacesViewHolder> implements Filterable {
 
     private static final String TAG = "BedSpacesAdapter";
 
@@ -38,7 +42,7 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
 
 
 
-    public BedSpacesAdapter(ArrayList<BedSpaces> spaces){
+    public HallsAdapter(ArrayList<BedSpaces> spaces){
         this.mSpaces = spaces;
         this.mSpacesFiltered = spaces;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -49,8 +53,8 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 BedSpaces bedSpaces = dataSnapshot.getValue(BedSpaces.class);
                 bedSpaces.setId(dataSnapshot.getKey());
-                BedSpacesAdapter.this.mSpaces.add(bedSpaces);
-                notifyItemInserted(BedSpacesAdapter.this.mSpaces.size()-1);
+                HallsAdapter.this.mSpaces.add(bedSpaces);
+                notifyItemInserted(HallsAdapter.this.mSpaces.size()-1);
                 String bedspaceId = bedSpaces.getId();
                 Log.d(TAG, "onChildAdded: " + bedspaceId);
             }
@@ -84,7 +88,7 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
 
         Context mCtx = parent.getContext();
         View view = LayoutInflater.from(mCtx).
-                inflate(R.layout.rv_item_layout, parent, false);
+                inflate(R.layout.rv_halls_item_layout, parent, false);
         BedSpacesViewHolder holder = new BedSpacesViewHolder(view);
         view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
 
@@ -94,10 +98,20 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
     @Override
     public void onBindViewHolder(@NonNull BedSpacesViewHolder holder, int position) {
 
-        BedSpaces bedSpaces = mSpacesFiltered.get(position);
-        holder.tvHall.setText(bedSpaces.getHall());
-        holder.tvPrice.setText(bedSpaces.getPrice());
-        holder.tvRoomNo.setText(bedSpaces.getRoomNumber());
+
+
+        for (BedSpaces bedSpaces: mSpacesFiltered) {
+            if (position>0 && mSpacesFiltered.get(position).getHall().equals(bedSpaces.getHall())) {
+                holder.mCardView.setVisibility(View.GONE);
+                break;
+            }
+            else {
+                holder.mCardView.setVisibility(View.VISIBLE);
+                bedSpaces = mSpacesFiltered.get(position);
+                holder.tvHall.setText(bedSpaces.getHall());
+                break;
+            }
+        }
 
     }
 
@@ -145,27 +159,30 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
     };
 
     class BedSpacesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvRoomNo;
-        TextView tvPrice;
         TextView tvHall;
+        CardView mCardView;
 
         public BedSpacesViewHolder(@NonNull View itemView) {
             super(itemView);
             tvHall = (TextView) itemView.findViewById(R.id.tvHall);
-            tvRoomNo = (TextView)itemView.findViewById(R.id.tvRoomNo);
-            tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
             itemView.setOnClickListener(this);
+            mCardView = itemView.findViewById(R.id.cardView);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
             Log.d("click",String.valueOf(position));
-            BedSpaces selectedBedSpace = mSpacesFiltered.get(position);
-            Intent intent = new Intent(view.getContext(), BedSpaceActivity.class);
-            intent.putExtra("bedSpaces",selectedBedSpace);
-            //intent.putExtra("bedSpace", (Serializable) selectedBedSpace);
-            view.getContext().startActivity(intent);
+//            BedSpaces selectedBedSpace = mSpacesFiltered.get(position);
+//            Intent intent = new Intent(view.getContext(), BedSpaceActivity.class);
+//            intent.putExtra("bedSpaces",selectedBedSpace);
+//            //intent.putExtra("bedSpace", (Serializable) selectedBedSpace);
+//            view.getContext().startActivity(intent);
+            Snackbar.make(view, "list of available bedspaces in selected hall to be displayed",
+                    BaseTransientBottomBar.LENGTH_LONG).show();
+
+            //TODO: display list of offers available from selected hall
+
         }
     }
 

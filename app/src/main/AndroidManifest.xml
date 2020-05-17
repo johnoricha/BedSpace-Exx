@@ -6,11 +6,12 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_bedspace_launcher"
-        android:roundIcon="@mipmap/bed2"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/bed2"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
-        <activity android:name=".Activities.SplashScreenActivity"
+        <activity
+            android:name=".Activities.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,10 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.SplashScreenActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".Activities.LoginActivity">
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Activities.RegisterActivity"></activity>
+        <activity android:name=".Activities.LoginActivity"></activity>
+        <activity android:name=".Activities.RegisterActivity" />
         <activity
             android:name=".Activities.InsertBedSpaceDealActivity"
             android:label="Upload Your Offer"
@@ -30,7 +38,8 @@
             android:name=".Activities.BedSpaceActivity"
             android:label="Room Details"
             android:parentActivityName=".Activities.BedSpaceListActivity" />
-        <activity android:name=".Activities.BedSpaceListActivity"></activity>
+        <activity
+            android:name=".Activities.BedSpaceListActivity" />
     </application>
 
 </manifest>

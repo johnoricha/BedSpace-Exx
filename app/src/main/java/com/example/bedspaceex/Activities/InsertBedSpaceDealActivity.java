@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.example.bedspaceex.Adapters.BedSpacesAdapter;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
 import com.google.firebase.database.DatabaseReference;
@@ -33,17 +35,20 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     Button mBtnUploadOffer;
     EditText mEditTextPhoneNo;
     EditText mEditTextPrice;
-    public static String OWNER_NAME;
-    public String mOwnerName;
+
+    private String mOwnerName;
     private String mRoomNumber;
     private String mHall;
     private String mPrice;
     private String mPhoneNumber;
+    private Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_bed_space_deal);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -54,8 +59,8 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         mEditTextPhoneNo = (EditText) findViewById(R.id.editText_phone_number);
         mEditTextPrice = (EditText) findViewById(R.id.editText_price);
 
-        Intent intent = getIntent();
-        BedSpaces bedSpaces = (BedSpaces) intent.getSerializableExtra("bedspaceToEdit");
+        mIntent = getIntent();
+        BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
 
         if (bedSpaces == null) {
             //do nothing
@@ -71,7 +76,7 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         }
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("sellers");
+        mDatabaseReference = mFirebaseDatabase.getReference().child("offers");
 
         //hallsList = new ArrayList<String>();
 
@@ -112,15 +117,21 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
 
     private void saveToDatabase() {
 
-        mOwnerName = mEditTextOwnerName.getText().toString();
-        mRoomNumber = mEditTextRoomNo.getText().toString();
-        mHall = mSpinnerHalls.getSelectedItem().toString();
-        mPrice = mEditTextPrice.getText().toString();
-        mPhoneNumber = mEditTextPhoneNo.getText().toString();
+//        BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
 
-        OWNER_NAME = mOwnerName;
+        BedSpaces bedSpaces = new BedSpaces();
 
-        BedSpaces bedSpaces = new BedSpaces(mOwnerName, mRoomNumber, mHall, mPhoneNumber, mPrice);
+        bedSpaces.setHall(mSpinnerHalls.getSelectedItem().toString());
+        bedSpaces.setOwnerName(mEditTextOwnerName.getText().toString());
+        bedSpaces.setRoomNumber(mEditTextRoomNo.getText().toString());
+        bedSpaces.setPhoneNumber(mEditTextPhoneNo.getText().toString());
+        bedSpaces.setPrice(mEditTextPrice.getText().toString());
+//        mOwnerName = mEditTextOwnerName.getText().toString();
+//        mRoomNumber = mEditTextRoomNo.getText().toString();
+//        mHall = mSpinnerHalls.getSelectedItem().toString();
+//        mPrice = mEditTextPrice.getText().toString();
+//        mPhoneNumber = mEditTextPhoneNo.getText().toString();
+//        BedSpaces bedSpaces = new BedSpaces(mOwnerName, mRoomNumber, mHall, mPhoneNumber, mPrice);
         if (bedSpaces.getId() == null) {
             mDatabaseReference.push().setValue(bedSpaces);
         }
@@ -133,8 +144,8 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
         inflater.inflate(R.menu.delete_menu, menu);
-        Intent intent = getIntent();
-        BedSpaces bedSpaces = (BedSpaces) intent.getSerializableExtra("bedspaceToEdit");
+//        Intent intent = getIntent();
+        BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
         if(bedSpaces != null) {
             menu.findItem(R.id.menu_item_save).setVisible(true);
             menu.findItem(R.id.menu_item_delete).setVisible(true);
@@ -167,14 +178,14 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     }
 
     private void backToList() {
-        Intent intent = new Intent(this, BedSpaceListActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finishAffinity();
     }
 
     private void updateOffer() {
-        Intent intent = getIntent();
-        BedSpaces bedSpaces = (BedSpaces) intent.getSerializableExtra("bedspaceToEdit");
+        mIntent = getIntent();
+        BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
         bedSpaces.setOwnerName(mEditTextOwnerName.getText().toString());
         bedSpaces.setRoomNumber(mEditTextRoomNo.getText().toString());
         bedSpaces.setPhoneNumber(mEditTextPhoneNo.getText().toString());

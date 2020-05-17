@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(user.isEmailVerified()) {
                         Log.d(TAG, "onAuthStateChanged: signed in " + user.getUid());
                         Toast.makeText(LoginActivity.this, "Welcome " + user.getEmail(), Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, BedSpaceListActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finishAffinity();
                     } else {
