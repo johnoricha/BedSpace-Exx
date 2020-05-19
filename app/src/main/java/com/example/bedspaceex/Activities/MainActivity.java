@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         getSupportActionBar().setHomeButtonEnabled(true);

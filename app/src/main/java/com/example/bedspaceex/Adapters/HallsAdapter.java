@@ -97,9 +97,6 @@ public class HallsAdapter extends RecyclerView.Adapter<HallsAdapter.BedSpacesVie
 
     @Override
     public void onBindViewHolder(@NonNull BedSpacesViewHolder holder, int position) {
-
-
-
         for (BedSpaces bedSpaces: mSpacesFiltered) {
             if (position>0 && mSpacesFiltered.get(position).getHall().equals(bedSpaces.getHall())) {
                 holder.mCardView.setVisibility(View.GONE);
@@ -112,9 +109,7 @@ public class HallsAdapter extends RecyclerView.Adapter<HallsAdapter.BedSpacesVie
                 break;
             }
         }
-
     }
-
     @Override
     public int getItemCount() {
         return mSpacesFiltered.size();
