@@ -30,7 +30,7 @@
         <activity android:name=".Activities.LoginActivity"></activity>
         <activity android:name=".Activities.RegisterActivity" />
         <activity
-            android:name=".Activities.InsertBedSpaceDealActivity"
+            android:name=".Activities.InsertEditBedSpaceDealActivity"
             android:label="Upload Your Offer"
             android:parentActivityName=".Activities.BedSpaceListActivity" />
         <activity

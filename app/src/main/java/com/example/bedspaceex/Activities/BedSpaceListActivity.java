@@ -59,7 +59,7 @@ public class BedSpaceListActivity extends AppCompatActivity {
                 //Toast.makeText(this,"Deal saved", Toast.LENGTH_LONG).show();
                 //clean();
                 //backToList();
-                Intent intent = new Intent(BedSpaceListActivity.this, InsertBedSpaceDealActivity.class);
+                Intent intent = new Intent(BedSpaceListActivity.this, InsertEditBedSpaceDealActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_item_signout:

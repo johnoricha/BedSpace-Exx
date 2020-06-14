@@ -10,18 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.bedspaceex.Adapters.BedSpacesAdapter;
 import com.example.bedspaceex.Adapters.HallsAdapter;
+import com.example.bedspaceex.FirebaseUtil;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
 import com.google.android.material.navigation.NavigationView;
@@ -29,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private HallsAdapter mHallsAdapter;
     private DrawerLayout mDrawerLayout;
+    private FirebaseUtil mFirebaseUtil;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +47,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main_navdraw);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mFirebaseUtil = new FirebaseUtil(this);
+        mFirebaseUtil.checkAdmin();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         setUpFirebaseAuthStateListener();
 
         initializeDisplayContent();
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -102,6 +103,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         inflater.inflate(R.menu.sell_menu, menu);
         inflater.inflate(R.menu.search_menu, menu);
         inflater.inflate(R.menu.signout_menu, menu);
+        MenuItem sellMenu = menu.findItem(R.id.menu_item_sell);
+        if(mFirebaseUtil.isAdmin) {
+            Log.d(TAG, "onCreateOptionsMenu: you are an admin");
+            sellMenu.setVisible(true);
+        } else {
+            Log.d(TAG, "onCreateOptionsMenu: " + "you are not an admin ");
+            sellMenu.setVisible(false);
+        }
+
         MenuItem menuItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -127,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(this,"Deal saved", Toast.LENGTH_LONG).show();
                 //clean();
                 //backToList();
-                Intent intent = new Intent(MainActivity.this, InsertBedSpaceDealActivity.class);
+                Intent intent = new Intent(MainActivity.this, InsertEditBedSpaceDealActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_item_signout:

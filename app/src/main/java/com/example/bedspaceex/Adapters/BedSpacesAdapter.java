@@ -2,12 +2,15 @@ package com.example.bedspaceex.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +102,16 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
         holder.tvHall.setText(bedSpaces.getHall());
         holder.tvPrice.setText(bedSpaces.getPrice());
         holder.tvRoomNo.setText(bedSpaces.getRoomNumber());
+        String thumbnailUrl = bedSpaces.getImageUrl();
+        if (thumbnailUrl != null) {
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            Picasso.get().
+                    load(Uri.parse(thumbnailUrl))
+                    .resize(width, width*2/3)
+                    .centerCrop()
+                    .into(holder.thumbnail);
+        }
+
 
     }
 
@@ -148,12 +162,14 @@ public class BedSpacesAdapter extends RecyclerView.Adapter<BedSpacesAdapter.BedS
         TextView tvRoomNo;
         TextView tvPrice;
         TextView tvHall;
+        ImageView thumbnail;
 
         public BedSpacesViewHolder(@NonNull View itemView) {
             super(itemView);
             tvHall = (TextView) itemView.findViewById(R.id.tvHall);
             tvRoomNo = (TextView)itemView.findViewById(R.id.tvRoomNo);
             tvPrice = (TextView)itemView.findViewById(R.id.tvPrice);
+            thumbnail = (ImageView) itemView.findViewById(R.id.list_item_image_view);
             itemView.setOnClickListener(this);
         }
 

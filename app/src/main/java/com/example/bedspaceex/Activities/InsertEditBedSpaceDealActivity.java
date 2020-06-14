@@ -2,6 +2,8 @@ package com.example.bedspaceex.Activities;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,23 +13,34 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.bedspaceex.Adapters.BedSpacesAdapter;
+import com.example.bedspaceex.FirebaseUtil;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-public class InsertBedSpaceDealActivity extends AppCompatActivity {
+public class InsertEditBedSpaceDealActivity extends AppCompatActivity {
     private static final String TAG = "InsertBedSpaceDealActiv";
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
+
+    public static final int REQUEST_CODE = 590;
 
     EditText mEditTextOwnerName;
     EditText mEditTextRoomNo;
@@ -35,13 +48,10 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     Button mBtnUploadOffer;
     EditText mEditTextPhoneNo;
     EditText mEditTextPrice;
-
-    private String mOwnerName;
-    private String mRoomNumber;
-    private String mHall;
-    private String mPrice;
-    private String mPhoneNumber;
+    Button mBtnSelectImage;
+    ImageView mImageView;
     private Intent mIntent;
+    private Uri mDownloadUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +62,16 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FirebaseUtil.getFirebaseStorage();
+
         mEditTextOwnerName = (EditText) findViewById(R.id.editText_owner_name);
         mEditTextRoomNo = (EditText) findViewById(R.id.editText_roomNo);
         mSpinnerHalls = (Spinner) findViewById(R.id.spinner_hall);
         mBtnUploadOffer = (Button) findViewById(R.id.btn_upload_offer);
         mEditTextPhoneNo = (EditText) findViewById(R.id.editText_phone_number);
         mEditTextPrice = (EditText) findViewById(R.id.editText_price);
+        mBtnSelectImage = (Button) findViewById(R.id.btn_select_image);
+        mImageView = (ImageView) findViewById(R.id.image);
 
         mIntent = getIntent();
         BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
@@ -97,15 +111,72 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
                 && !isEmpty(mEditTextPrice.getText().toString()) && !isEmpty(mEditTextRoomNo.getText().toString())) {
                     saveToDatabase();
                     Log.d(TAG,"deal saved");
-                    Toast.makeText(InsertBedSpaceDealActivity.this, "Offer uploaded", Toast.LENGTH_LONG).show();
+                    Toast.makeText(InsertEditBedSpaceDealActivity.this, "Offer uploaded", Toast.LENGTH_LONG).show();
                     clean();
                     backToList();
                 }else {
-                    Toast.makeText(InsertBedSpaceDealActivity.this, "You must fill out all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InsertEditBedSpaceDealActivity.this, "You must fill out all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        mBtnSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "get picture"), REQUEST_CODE);
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri imageUri = data.getData();
+            final StorageReference reference = FirebaseUtil.getStorageReference().child(imageUri.getLastPathSegment());
+//            reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    String url = taskSnapshot.getStorage().getDownloadUrl().toString();
+//                    BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
+//                    if (bedSpaces == null) {
+//                        bedSpaces = new BedSpaces();
+//                    }
+//                    bedSpaces.setImageUrl(url);
+//                }
+//            });
+            UploadTask uploadTask = reference.putFile(imageUri);
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return reference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        mDownloadUri = task.getResult();
+                        BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedspaceToEdit");
+                        if (bedSpaces == null) {
+                            bedSpaces = new BedSpaces();
+                            bedSpaces.setImageUrl(mDownloadUri.toString());
+                        }
+                        bedSpaces.setImageUrl(mDownloadUri.toString());
+                        showImage(mDownloadUri.toString());
+                    } else {
+                        //handle failures
+                    }
+                }
+            });
+        }
+    }
+
     private void clean() {
         mEditTextOwnerName.setText("");
         mEditTextPhoneNo.setText("");
@@ -126,6 +197,7 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
         bedSpaces.setRoomNumber(mEditTextRoomNo.getText().toString());
         bedSpaces.setPhoneNumber(mEditTextPhoneNo.getText().toString());
         bedSpaces.setPrice(mEditTextPrice.getText().toString());
+        bedSpaces.setImageUrl(mDownloadUri.toString());
 //        mOwnerName = mEditTextOwnerName.getText().toString();
 //        mRoomNumber = mEditTextRoomNo.getText().toString();
 //        mHall = mSpinnerHalls.getSelectedItem().toString();
@@ -166,7 +238,7 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
                 updateOffer();
                 Toast.makeText(this, "Offer updated", Toast.LENGTH_LONG).show();
                 backToList();}
-                else {Toast.makeText(InsertBedSpaceDealActivity.this, "You must fill out all the fields", Toast.LENGTH_SHORT).show();}
+                else {Toast.makeText(InsertEditBedSpaceDealActivity.this, "You must fill out all the fields", Toast.LENGTH_SHORT).show();}
                 return true;
             case (R.id.menu_item_delete):
                 deleteOffer();
@@ -206,6 +278,16 @@ public class InsertBedSpaceDealActivity extends AppCompatActivity {
     }
     private boolean isEmpty(String string){
         return string.equals("");
+    }
+
+    private void showImage(String url) {
+        if (url != null && url.isEmpty() == false) {
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            Picasso.get().load(Uri.parse(url))
+                    .resize(width, width*2/3)
+                    .centerCrop()
+                    .into(mImageView);
+        }
     }
 
 }

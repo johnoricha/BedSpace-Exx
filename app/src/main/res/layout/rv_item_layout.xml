@@ -18,70 +18,88 @@
         app:cardUseCompatPadding="true"
         app:contentPadding="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="4dp"
-            android:paddingBottom="4dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvHall"
+            <ImageView
+                android:id="@+id/list_item_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="hall"
-                android:textSize="20sp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/tvRoomNo"
-                app:layout_constraintTop_toBottomOf="@+id/tvRoomNo"
-                app:layout_constraintVertical_bias="0.0">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tvRoomNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:inputType="textShortMessage|textNoSuggestions|textCapCharacters"
-                android:text="roomnumber"
-                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.052"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:srcCompat="@drawable/ic_launcher_foreground" />
 
-            </TextView>
-
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="140dp"
-                android:text="price"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvRoomNo"
-                app:layout_constraintTop_toBottomOf="@+id/tvRoomNo">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tvNairaSign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="₦"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
-                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-                app:layout_constraintTop_toTopOf="@+id/tvPrice" />
+                android:paddingStart="4dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp">
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvHall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hall"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/tvRoomNo"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRoomNo"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvRoomNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:inputType="textShortMessage|textNoSuggestions|textCapCharacters"
+                    android:text="roomnumber"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="price"
+                    android:textSize="20sp"
+                    android:textColor="@color/toolbar_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRoomNo"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvNairaSign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₦"
+                    android:textColor="@color/toolbar_color"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+                    app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                    app:layout_constraintTop_toTopOf="@+id/tvPrice" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+
 
 
     </androidx.cardview.widget.CardView>

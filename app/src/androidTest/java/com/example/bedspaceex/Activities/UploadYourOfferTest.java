@@ -1,5 +1,8 @@
 package com.example.bedspaceex.Activities;
 
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -14,6 +17,7 @@ import java.util.List;
 
 import static androidx.test.espresso.Espresso.*;
 import static androidx.test.espresso.action.ViewActions.*;
+
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
@@ -65,8 +69,13 @@ public class UploadYourOfferTest {
         onView(withId(R.id.btn_upload_offer)).perform(click());
 
 //        pressBack();
-        onView(withId(R.id.rvBedSpaceList)).perform(swipeUp());
         List<BedSpaces> list = mMainActivityActivityTestRule.getActivity().mSpaces;
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_halls));
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_bedspaces));
+        onView(withId(R.id.rvBedSpaceList)).perform(RecyclerViewActions.scrollToPosition(list.size()-1));
+
         int newOfferIndex = list.size()-1;
         String newSeller = list.get(newOfferIndex).getOwnerName();
         String newPrice = list.get(newOfferIndex).getPrice();

@@ -1,6 +1,7 @@
 package com.example.bedspaceex.Activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bedspaceex.FirebaseUtil;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 public class BedSpaceActivity extends AppCompatActivity {
     TextView mTextViewHall;
@@ -33,7 +36,7 @@ public class BedSpaceActivity extends AppCompatActivity {
     TextView mTxtRoomNo;
     TextView mTxtPhone;
     TextView mTxtOwnerName;
-    ImageView imgOwner;
+    ImageView imgHouse;
     //private FirebaseDatabase mFirebaseDatabase;
     //private DatabaseReference mDatabaseReference;
     private static final String TAG = "BedSpaceActivity";
@@ -41,6 +44,7 @@ public class BedSpaceActivity extends AppCompatActivity {
     private BedSpaces mBedSpaces;
     public Intent mIntent;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUtil mFirebaseUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +66,11 @@ public class BedSpaceActivity extends AppCompatActivity {
         mTxtPhone = (TextView) findViewById(R.id.txtPhoneNo);
         mTxtRoomNo = (TextView) findViewById(R.id.txtRoomNo);
         mTxtPrice = (TextView) findViewById(R.id.txtPrice);
-        imgOwner = (ImageView) findViewById(R.id.imgOwner);
+        imgHouse = (ImageView) findViewById(R.id.imgOwner);
 
         //mFirebaseDatabase = FirebaseDatabase.getInstance();
         //mDatabaseReference = mFirebaseDatabase.getReference().child("sellers");
+
 
         mIntent = getIntent();
         BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedSpaces");
@@ -77,6 +82,9 @@ public class BedSpaceActivity extends AppCompatActivity {
         mTextViewRoomNo.setText(String.valueOf(bedSpaces.getRoomNumber()));
         mTextViewPhoneNo.setText(bedSpaces.getPhoneNumber());
         mTextViewHall.setText(bedSpaces.getHall());
+        showImage(bedSpaces.getImageUrl());
+        mFirebaseUtil = new FirebaseUtil(BedSpaceActivity.this);
+        mFirebaseUtil.checkAdmin();
 
         mTextViewPhoneNo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +104,12 @@ public class BedSpaceActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_item_edit);
+        if (mFirebaseUtil.isAdmin) {
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+        }
         return true;
     }
 
@@ -103,7 +117,7 @@ public class BedSpaceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_edit:
-                Intent editActivityIntent = new Intent(this, InsertBedSpaceDealActivity.class);
+                Intent editActivityIntent = new Intent(this, InsertEditBedSpaceDealActivity.class);
                 editActivityIntent.putExtra("bedspaceToEdit", mBedSpaces);
                 startActivity(editActivityIntent);
                 return true;
@@ -128,6 +142,16 @@ public class BedSpaceActivity extends AppCompatActivity {
             finish();
         } else {
             Log.d(TAG, "checkAuthenticationState: user is authenticated.");
+        }
+    }
+
+    private void showImage(String url) {
+        if (url != null && url.isEmpty() == false) {
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            Picasso.get().load(Uri.parse(url))
+                    .resize(width, width*2/3)
+                    .centerCrop()
+                    .into(imgHouse);
         }
     }
     /*public void createPhoneIntent(View view) {

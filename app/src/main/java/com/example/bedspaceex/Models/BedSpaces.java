@@ -10,6 +10,7 @@ public class BedSpaces implements Serializable {
     private String phoneNumber;
     private String price;
     private String id;
+    private String imageUrl;
 
     public BedSpaces(){
 
@@ -84,5 +85,13 @@ public class BedSpaces implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

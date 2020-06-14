@@ -6,159 +6,186 @@
     android:layout_height="match_parent"
     tools:context=".Activities.BedSpaceActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include
+        android:id="@+id/include3"
+        layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/tvPrice"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.659"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include3"
+        app:cardCornerRadius="4dp">
 
-    <TextView
-        android:id="@+id/tvOwnerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/tvPrice"
-        app:layout_constraintStart_toStartOf="@+id/tvPrice"
-        app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tvNairaSign"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="₦"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
-        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/txtPrice"
-        app:layout_constraintTop_toTopOf="@+id/tvPrice"></TextView>
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="68dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtPrice" />
 
-    <TextView
-        android:id="@+id/tvRoomNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/tvOwnerName"
-        app:layout_constraintStart_toStartOf="@+id/tvOwnerName"
-        app:layout_constraintTop_toBottomOf="@+id/tvOwnerName" />
+            <TextView
+                android:id="@+id/tvOwnerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/tvPrice"
+                app:layout_constraintStart_toStartOf="@+id/tvPrice"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
 
-    <TextView
-        android:id="@+id/tvHall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/tvOwnerName"
-        app:layout_constraintStart_toStartOf="@+id/tvOwnerName"
-        app:layout_constraintTop_toBottomOf="@+id/tvRoomNo" />
+            <TextView
+                android:id="@+id/tvNairaSign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₦"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/txtPrice"
+                app:layout_constraintTop_toTopOf="@+id/tvPrice"></TextView>
 
-    <TextView
-        android:id="@+id/tvPhoneNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textStyle="italic"
-        android:textColor="#4d94ff"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="@+id/txtPhoneNo"
-        app:layout_constraintEnd_toEndOf="@+id/tvHall"
-        app:layout_constraintStart_toStartOf="@+id/tvHall"
-        app:layout_constraintTop_toBottomOf="@+id/tvHall"
-        android:clickable="true" />
+            <TextView
+                android:id="@+id/tvRoomNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/tvOwnerName"
+                app:layout_constraintStart_toStartOf="@+id/tvOwnerName"
+                app:layout_constraintTop_toBottomOf="@+id/tvOwnerName" />
 
-    <TextView
-        android:id="@+id/txtPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
-        android:text="Price:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#050505"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
-        app:layout_constraintHorizontal_bias="0.539"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvHall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="@+id/tvOwnerName"
+                app:layout_constraintStart_toStartOf="@+id/tvOwnerName"
+                app:layout_constraintTop_toBottomOf="@+id/tvRoomNo" />
 
-    <TextView
-        android:id="@+id/txtOwnerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Owner:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#050505"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/txtPrice"
-        app:layout_constraintStart_toStartOf="@+id/txtPrice"
-        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+            <TextView
+                android:id="@+id/tvPhoneNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#4d94ff"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/txtPhoneNo"
+                app:layout_constraintEnd_toEndOf="@+id/tvHall"
+                app:layout_constraintStart_toStartOf="@+id/tvHall"
+                app:layout_constraintTop_toBottomOf="@+id/tvHall" />
 
-    <TextView
-        android:id="@+id/txtRoomNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Room Number:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#050505"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/txtOwnerName"
-        app:layout_constraintStart_toStartOf="@+id/txtOwnerName"
-        app:layout_constraintTop_toBottomOf="@+id/txtOwnerName" />
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Price:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#050505"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+                app:layout_constraintHorizontal_bias="0.332"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgOwner" />
 
-    <TextView
-        android:id="@+id/txtHall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:text="Hall:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#050505"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/txtRoomNo"
-        app:layout_constraintStart_toStartOf="@+id/txtRoomNo"
-        app:layout_constraintTop_toBottomOf="@+id/txtRoomNo" />
+            <TextView
+                android:id="@+id/txtOwnerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Owner:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#050505"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/txtPrice"
+                app:layout_constraintStart_toStartOf="@+id/txtPrice"
+                app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
 
-    <TextView
-        android:id="@+id/txtPhoneNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="Contact:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="#050505"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/txtHall"
-        app:layout_constraintStart_toStartOf="@+id/txtHall"
-        app:layout_constraintTop_toBottomOf="@+id/txtHall" />
+            <TextView
+                android:id="@+id/txtRoomNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Room Number:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#050505"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/txtOwnerName"
+                app:layout_constraintStart_toStartOf="@+id/txtOwnerName"
+                app:layout_constraintTop_toBottomOf="@+id/txtOwnerName" />
 
-    <ImageView
-        android:id="@+id/imgOwner"
-        android:layout_width="134dp"
-        android:layout_height="147dp"
-        android:layout_marginTop="136dp"
-        android:background="#00BCD4"
-        app:layout_constraintBottom_toTopOf="@+id/tvPrice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+            <TextView
+                android:id="@+id/txtHall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:text="Hall:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#050505"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/txtRoomNo"
+                app:layout_constraintStart_toStartOf="@+id/txtRoomNo"
+                app:layout_constraintTop_toBottomOf="@+id/txtRoomNo" />
+
+            <TextView
+                android:id="@+id/txtPhoneNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="1dp"
+                android:text="Contact:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#050505"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/txtHall"
+                app:layout_constraintStart_toStartOf="@+id/txtHall"
+                app:layout_constraintTop_toBottomOf="@+id/txtHall" />
+
+            <ImageView
+                android:id="@+id/imgOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:padding="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvNairaSign"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_launcher_foreground" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
