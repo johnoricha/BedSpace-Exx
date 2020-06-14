@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private static final String TAG = "LoginActivity";
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(user.isEmailVerified()) {
                         Log.d(TAG, "onAuthStateChanged: signed in " + user.getUid());
                         Toast.makeText(LoginActivity.this, "Welcome " + user.getEmail(), Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, BedSpaceListActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finishAffinity();
                     } else {

@@ -10,6 +10,7 @@ public class BedSpaces implements Serializable {
     private String phoneNumber;
     private String price;
     private String id;
+    private String imageUrl;
 
     public BedSpaces(){
 
@@ -19,15 +20,7 @@ public class BedSpaces implements Serializable {
 //        this.id = id;
 //    }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price) {
+    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price, String id) {
         this.ownerName = ownerName;
         this.roomNumber = roomNumber;
         this.hall = hall;
@@ -35,6 +28,16 @@ public class BedSpaces implements Serializable {
         this.price = price;
         this.id = id;
     }
+
+
+//    public BedSpaces(String ownerName, String roomNumber, String hall, String phoneNumber, String price) {
+//        this.ownerName = ownerName;
+//        this.roomNumber = roomNumber;
+//        this.hall = hall;
+//        this.phoneNumber = phoneNumber;
+//        this.price = price;
+//        this.id = id;
+//    }
 
     public String getOwnerName() {
         return ownerName;
@@ -74,5 +77,21 @@ public class BedSpaces implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

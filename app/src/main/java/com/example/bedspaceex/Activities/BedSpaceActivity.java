@@ -1,10 +1,13 @@
 package com.example.bedspaceex.Activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,69 +17,79 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bedspaceex.FirebaseUtil;
 import com.example.bedspaceex.Models.BedSpaces;
 import com.example.bedspaceex.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 public class BedSpaceActivity extends AppCompatActivity {
-    TextView tvHall;
-    TextView tvPrice;
-    TextView tvRoomNo;
-    TextView tvOwnerName;
-    TextView tvPhoneNo;
-    TextView tvBlock;
-    TextView txtHall;
-    TextView txtPrice;
-    TextView txtRoomNo;
-    TextView txtPhone;
-    TextView txtOwnerName;
-    ImageView imgOwner;
+    TextView mTextViewHall;
+    TextView mTextViewPrice;
+    TextView mTextViewRoomNo;
+    TextView mTextViewOwnerName;
+    TextView mTextViewPhoneNo;
+   // TextView tvBlock;
+    TextView mTxtHall;
+    TextView mTxtPrice;
+    TextView mTxtRoomNo;
+    TextView mTxtPhone;
+    TextView mTxtOwnerName;
+    ImageView imgHouse;
     //private FirebaseDatabase mFirebaseDatabase;
     //private DatabaseReference mDatabaseReference;
     private static final String TAG = "BedSpaceActivity";
 
-    private BedSpaces bedSpaces;
+    private BedSpaces mBedSpaces;
     public Intent mIntent;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUtil mFirebaseUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bed_space);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvHall = (TextView) findViewById(R.id.tvHall);
-        tvOwnerName = (TextView) findViewById(R.id.tvOwnerName);
-        tvPrice = (TextView) findViewById(R.id.tvPrice);
-        tvRoomNo = (TextView) findViewById(R.id.tvRoomNo);
-        tvPhoneNo = (TextView) findViewById(R.id.tvPhoneNo);
-        txtHall = (TextView) findViewById(R.id.txtHall);
-        txtOwnerName = (TextView) findViewById(R.id.txtOwnerName);
-        txtPhone = (TextView) findViewById(R.id.txtPhoneNo);
-        txtRoomNo = (TextView) findViewById(R.id.txtRoomNo);
-        txtPrice = (TextView) findViewById(R.id.txtPrice);
-        imgOwner = (ImageView) findViewById(R.id.imgOwner);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mTextViewHall = (TextView) findViewById(R.id.tvHall);
+        mTextViewOwnerName = (TextView) findViewById(R.id.tvOwnerName);
+        mTextViewPrice = (TextView) findViewById(R.id.tvPrice);
+        mTextViewRoomNo = (TextView) findViewById(R.id.tvRoomNo);
+        mTextViewPhoneNo = (TextView) findViewById(R.id.tvPhoneNo);
+        mTxtHall = (TextView) findViewById(R.id.txtHall);
+        mTxtOwnerName = (TextView) findViewById(R.id.txtOwnerName);
+        mTxtPhone = (TextView) findViewById(R.id.txtPhoneNo);
+        mTxtRoomNo = (TextView) findViewById(R.id.txtRoomNo);
+        mTxtPrice = (TextView) findViewById(R.id.txtPrice);
+        imgHouse = (ImageView) findViewById(R.id.imgOwner);
 
         //mFirebaseDatabase = FirebaseDatabase.getInstance();
         //mDatabaseReference = mFirebaseDatabase.getReference().child("sellers");
+
 
         mIntent = getIntent();
         BedSpaces bedSpaces = (BedSpaces) mIntent.getSerializableExtra("bedSpaces");
         if (bedSpaces == null)
             bedSpaces = new BedSpaces();
-        this.bedSpaces = bedSpaces;
-        tvPrice.setText(String.valueOf(bedSpaces.getPrice()));
-        tvOwnerName.setText(bedSpaces.getOwnerName());
-        tvRoomNo.setText(String.valueOf(bedSpaces.getRoomNumber()));
-        tvPhoneNo.setText(bedSpaces.getPhoneNumber());
-        tvHall.setText(bedSpaces.getHall());
+        this.mBedSpaces = bedSpaces;
+        mTextViewPrice.setText(String.valueOf(bedSpaces.getPrice()));
+        mTextViewOwnerName.setText(bedSpaces.getOwnerName());
+        mTextViewRoomNo.setText(String.valueOf(bedSpaces.getRoomNumber()));
+        mTextViewPhoneNo.setText(bedSpaces.getPhoneNumber());
+        mTextViewHall.setText(bedSpaces.getHall());
+        showImage(bedSpaces.getImageUrl());
+        mFirebaseUtil = new FirebaseUtil(BedSpaceActivity.this);
+        mFirebaseUtil.checkAdmin();
 
-        tvPhoneNo.setOnClickListener(new View.OnClickListener() {
+        mTextViewPhoneNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sellerPhoneNo = (String) tvPhoneNo.getText();
+                String sellerPhoneNo = (String) mTextViewPhoneNo.getText();
                 Uri sellerPhoneUri = Uri.parse("tel:" + sellerPhoneNo);
                 Intent callSellerIntent = new Intent(Intent.ACTION_DIAL);
                 callSellerIntent.setData(sellerPhoneUri);
@@ -91,6 +104,12 @@ public class BedSpaceActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_item_edit);
+        if (mFirebaseUtil.isAdmin) {
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+        }
         return true;
     }
 
@@ -98,8 +117,8 @@ public class BedSpaceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_edit:
-                Intent editActivityIntent = new Intent(this, InsertBedSpaceDealActivity.class);
-                editActivityIntent.putExtra("bedspaceToEdit", bedSpaces);
+                Intent editActivityIntent = new Intent(this, InsertEditBedSpaceDealActivity.class);
+                editActivityIntent.putExtra("bedspaceToEdit", mBedSpaces);
                 startActivity(editActivityIntent);
                 return true;
         }
@@ -123,6 +142,16 @@ public class BedSpaceActivity extends AppCompatActivity {
             finish();
         } else {
             Log.d(TAG, "checkAuthenticationState: user is authenticated.");
+        }
+    }
+
+    private void showImage(String url) {
+        if (url != null && url.isEmpty() == false) {
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            Picasso.get().load(Uri.parse(url))
+                    .resize(width, width*2/3)
+                    .centerCrop()
+                    .into(imgHouse);
         }
     }
     /*public void createPhoneIntent(View view) {
